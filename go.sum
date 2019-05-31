@@ -287,8 +287,8 @@ github.com/xzl8028/gorp v2.0.1-0.20190301154413-3b31e9a39d05+incompatible h1:FN4
 github.com/xzl8028/gorp v2.0.1-0.20190301154413-3b31e9a39d05+incompatible/go.mod h1:0kX1qa3DOpaPJyOdMLeo7TcBN0QmUszj9a/VygOhDe0=
 github.com/xzl8028/rsc v0.0.0-20160330161541-bbaefb05eaa0/go.mod h1:nV5bfVpT//+B1RPD2JvRnxbkLmJEYXmRaaVl15fsXjs=
 github.com/xzl8028/viper v1.0.4/go.mod h1:uc5hKG9lv4/KRwPOt2c1omOyirS/UnuA2TytiZQSFHM=
-github.com/xzl8028/xenia-server v2.1.0 h1:mOMqLpjiLHQINXzZPjySk/0xTDVJXF4iuE4TSM80x6k=
-github.com/xzl8028/xenia-server v2.1.0/go.mod h1:Q2ZhvN9ctRLhMl2TQXNuptYqr6pL7lJKbLslKPJyA68=
+github.com/xzl8028/xenia-server v0.0.0 h1:dtapeuyU420t762pp8WupfRy1eBQGi5E8wYxkvQlnX8=
+github.com/xzl8028/xenia-server v0.0.0/go.mod h1:L3FqWtbnot6vDvQ7datrC8n8fEgTscXkOoDnGiwDmuM=
 github.com/ziutek/mymysql v1.5.4 h1:GB0qdRGsTwQSBVYuVShFBKaXSnSnYYC2d9knnE1LHFs=
 github.com/ziutek/mymysql v1.5.4/go.mod h1:LMSpPZ6DbqWFxNCHW77HeMg9I646SAhApZ/wKdgO/C0=
 go.opencensus.io v0.18.0/go.mod h1:vKdFvxhtzZ9onBp9VKHK8z/sRpBMnKAsufL7wlDrCOA=
