@@ -19,7 +19,7 @@ export default class UserActionsComponent extends React.PureComponent {
             <div>
                 <FormattedMessage
                     id='useractions.demo'
-                    defaultMessage='Demo Plugin: '
+                    defaultMessage='任务中心: '
                 />
                 <button
                     style={style.button}
@@ -27,7 +27,7 @@ export default class UserActionsComponent extends React.PureComponent {
                 >
                     <FormattedMessage
                         id='useractions.action'
-                        defaultMessage='Action'
+                        defaultMessage='行动'
                     />
                 </button>
             </div>

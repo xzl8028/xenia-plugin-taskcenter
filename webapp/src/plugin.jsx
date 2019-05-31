@@ -6,6 +6,8 @@ import en from 'i18n/en.json';
 
 import es from 'i18n/es.json';
 
+import zhCN from 'i18n/zh-CN.json';
+
 import {id as pluginId} from './manifest';
 
 import Root from './components/root';
@@ -36,8 +38,9 @@ function getTranslations(locale) {
         return en;
     case 'es':
         return es;
+    default:
+        return zhCN;
     }
-    return {};
 }
 
 export default class DemoPlugin {
@@ -56,7 +59,7 @@ export default class DemoPlugin {
             () => store.dispatch(channelHeaderButtonAction()),
             <FormattedMessage
                 id='plugin.name'
-                defaultMessage='Demo Plugin'
+                defaultMessage='任务中心'
             />,
         );
 
@@ -65,7 +68,7 @@ export default class DemoPlugin {
         registry.registerMainMenuAction(
             <FormattedMessage
                 id='plugin.name'
-                defaultMessage='Demo Plugin'
+                defaultMessage='任务中心'
             />,
             () => store.dispatch(mainMenuAction()),
             <MainMenuMobileIcon/>,
@@ -74,7 +77,7 @@ export default class DemoPlugin {
         registry.registerPostDropdownMenuAction(
             <FormattedMessage
                 id='plugin.name'
-                defaultMessage='Demo Plugin'
+                defaultMessage='任务中心'
             />,
             () => store.dispatch(postDropdownMenuAction()),
         );
@@ -84,7 +87,7 @@ export default class DemoPlugin {
             () => store.dispatch(fileUploadMethodAction()),
             <FormattedMessage
                 id='plugin.upload'
-                defaultMessage='Upload using Demo Plugin'
+                defaultMessage='使用任务中心上传'
             />,
         );
 

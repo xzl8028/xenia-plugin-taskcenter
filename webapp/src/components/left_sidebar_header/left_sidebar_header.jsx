@@ -28,20 +28,20 @@ export default class LeftSidebarHeader extends React.PureComponent {
                 />
                 <FormattedMessage
                     id='sidebar.demo'
-                    defaultMessage='Demo Plugin:'
+                    defaultMessage='任务中心:'
                 />
                 {' '}
                 {this.props.enabled ?
                     <span>
                         <FormattedMessage
                             id='sidebar.enabled'
-                            defaultMessage='Enabled'
+                            defaultMessage='已开启'
                         />
                     </span> :
                     <span>
                         <FormattedMessage
                             id='sidebar.disabled'
-                            defaultMessage='Disabled'
+                            defaultMessage='已禁用'
                         />
                     </span>
                 }
