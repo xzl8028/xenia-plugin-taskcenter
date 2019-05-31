@@ -13,7 +13,7 @@ require (
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.3.0
 	github.com/xzl8028/go-i18n v1.10.0 // indirect
-	github.com/xzl8028/xenia-server v0.0.0
+	github.com/xzl8028/xenia-server v2.1.0
 	go.uber.org/atomic v1.4.0 // indirect
 	go.uber.org/zap v1.10.0 // indirect
 	golang.org/x/crypto v0.0.0-20190506204251-e1dfcc566284 // indirect
