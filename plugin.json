@@ -1,7 +1,7 @@
 {
-    "id": "com.mattermost.demo-plugin",
+    "id": "com.xenia.demo-plugin",
     "name": "Demo Plugin",
-    "description": "This plugin demonstrates the capabilities of a Mattermost plugin.",
+    "description": "This plugin demonstrates the capabilities of a Xenia plugin.",
     "version": "0.0.6",
     "server": {
         "executables": {
@@ -16,7 +16,7 @@
     },
     "settings_schema": {
         "header": "Header: Configure your demo plugin settings below",
-        "footer": "Footer: The code for this demo plugin can be found [here](https://github.com/mattermost/mattermost-plugin-demo)",
+        "footer": "Footer: The code for this demo plugin can be found [here](https://github.com/xzl8028/xenia-plugin-demo)",
         "settings": [{
             "key": "ChannelName",
             "display_name": "Channel Name",

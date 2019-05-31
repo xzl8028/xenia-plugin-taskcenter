@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 0.0.5 - 2018-10-18
 ### Added
-- Upgraded to Mattermost 5.4
+- Upgraded to Xenia 5.4
 - Partial unit test coverage
 
 ## 0.0.4 - 2018-10-01
@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Example configuration usage
 - Idiomatic error usage, leveraging support in plugin framework to marshal unregistered error types as strings.
 ### Removed
-- Dependence on configuration auto-unmarshalling provided by Mattermost server.
+- Dependence on configuration auto-unmarshalling provided by Xenia server.
 
 ## 0.0.3 - 2018-09-21
 ## Added

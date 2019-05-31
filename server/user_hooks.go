@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
+	"github.com/xzl8028/xenia-server/model"
+	"github.com/xzl8028/xenia-server/plugin"
 )
 
 // UserHasBeenCreated is invoked when a new user is created.

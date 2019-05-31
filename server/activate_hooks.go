@@ -17,7 +17,7 @@ func (p *Plugin) checkServerVersion() error {
 
 	r := semver.MustParseRange(">=" + minimumServerVersion)
 	if !r(serverVersion) {
-		return fmt.Errorf("this plugin requires Mattermost v%s or later", minimumServerVersion)
+		return fmt.Errorf("this plugin requires Xenia v%s or later", minimumServerVersion)
 	}
 
 	return nil

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/mattermost/mattermost-server/model"
+	"github.com/xzl8028/xenia-server/model"
 )
 
 func (p *Plugin) postPluginMessage(id, msg string) *model.AppError {

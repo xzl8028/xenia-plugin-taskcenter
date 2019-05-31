@@ -6,8 +6,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
+	"github.com/xzl8028/xenia-server/model"
+	"github.com/xzl8028/xenia-server/plugin"
 )
 
 const CommandTrigger = "demo_plugin"

@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/mattermost/mattermost-server/plugin"
+	"github.com/xzl8028/xenia-server/plugin"
 )
 
 // ServeHTTP allows the plugin to implement the http.Handler interface. Requests destined for the
 // /plugins/{id} path will be routed to the plugin.
 //
-// The Mattermost-User-Id header will be present if (and only if) the request is by an
+// The Xenia-User-Id header will be present if (and only if) the request is by an
 // authenticated user.
 //
 // This demo implementation sends back whether or not the plugin hooks are currently enabled. It

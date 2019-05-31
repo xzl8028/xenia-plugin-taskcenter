@@ -3,11 +3,11 @@ package main
 import (
 	"sync"
 
-	"github.com/mattermost/mattermost-server/plugin"
+	"github.com/xzl8028/xenia-server/plugin"
 )
 
 type Plugin struct {
-	plugin.MattermostPlugin
+	plugin.XeniaPlugin
 
 	// configurationLock synchronizes access to the configuration.
 	configurationLock sync.RWMutex

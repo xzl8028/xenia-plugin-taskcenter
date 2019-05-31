@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
+	"github.com/xzl8028/xenia-server/model"
+	"github.com/xzl8028/xenia-server/plugin"
 )
 
 // UserHasJoinedTeam is invoked after the membership has been committed to the database. If

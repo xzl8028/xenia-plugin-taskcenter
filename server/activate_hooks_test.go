@@ -3,8 +3,8 @@ package main
 import (
 	"testing"
 
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin/plugintest"
+	"github.com/xzl8028/xenia-server/model"
+	"github.com/xzl8028/xenia-server/plugin/plugintest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

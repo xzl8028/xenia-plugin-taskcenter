@@ -119,17 +119,17 @@ dist:	apply server webapp bundle
 .PHONY: deploy
 deploy: dist
 ## It uses the API if appropriate environment variables are defined,
-## or copying the files directly to a sibling mattermost-server directory.
+## or copying the files directly to a sibling xenia-server directory.
 ifneq ($(and $(MM_SERVICESETTINGS_SITEURL),$(MM_ADMIN_USERNAME),$(MM_ADMIN_PASSWORD),$(CURL)),)
 	@echo "Installing plugin via API"
 	$(eval TOKEN := $(shell curl -i -X POST $(MM_SERVICESETTINGS_SITEURL)/api/v4/users/login -d '{"login_id": "$(MM_ADMIN_USERNAME)", "password": "$(MM_ADMIN_PASSWORD)"}' | grep Token | cut -f2 -d' ' 2> /dev/null))
 	@curl -s -H "Authorization: Bearer $(TOKEN)" -X POST $(MM_SERVICESETTINGS_SITEURL)/api/v4/plugins -F "plugin=@dist/$(BUNDLE_NAME)" -F "force=true" > /dev/null && \
 		curl -s -H "Authorization: Bearer $(TOKEN)" -X POST $(MM_SERVICESETTINGS_SITEURL)/api/v4/plugins/$(PLUGIN_ID)/enable > /dev/null && \
 		echo "OK." || echo "Sorry, something went wrong."
-else ifneq ($(wildcard ../mattermost-server/.*),)
+else ifneq ($(wildcard ../xenia-server/.*),)
 	@echo "Installing plugin via filesystem. Server restart and manual plugin enabling required"
-	mkdir -p ../mattermost-server/plugins
-	tar -C ../mattermost-server/plugins -zxvf dist/$(BUNDLE_NAME)
+	mkdir -p ../xenia-server/plugins
+	tar -C ../xenia-server/plugins -zxvf dist/$(BUNDLE_NAME)
 else
 	@echo "No supported deployment method available. Install plugin manually."
 endif
@@ -156,8 +156,8 @@ endif
 .PHONY: i18n-extract
 i18n-extract: 
 ifneq ($(HAS_WEBAPP),)
-	@[[ -d $(MM_UTILITIES_DIR) ]] || echo "You must clone github.com/mattermost/mattermost-utilities repo in .. to use this command"
-	@[[ -d $(MM_UTILITIES_DIR) ]] && cd $(MM_UTILITIES_DIR) && npm install && npm run babel && node mmjstool/build/index.js i18n extract-webapp --webapp-dir ../mattermost-plugin-demo/webapp
+	@[[ -d $(MM_UTILITIES_DIR) ]] || echo "You must clone github.com/xzl8028/mattermost-utilities repo in .. to use this command"
+	@[[ -d $(MM_UTILITIES_DIR) ]] && cd $(MM_UTILITIES_DIR) && npm install && npm run babel && node mmjstool/build/index.js i18n extract-webapp --webapp-dir ../xenia-plugin-demo/webapp
 endif
 
 ## Clean removes all build artifacts.

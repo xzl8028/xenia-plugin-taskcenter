@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
+	"github.com/xzl8028/xenia-server/model"
+	"github.com/xzl8028/xenia-server/plugin"
 )
 
 // ChannelHasBeenCreated is invoked after the channel has been committed to the database.

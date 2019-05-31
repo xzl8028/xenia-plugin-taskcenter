@@ -5,12 +5,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/model"
+	"github.com/xzl8028/xenia-server/model"
 )
 
-// configuration captures the plugin's external configuration as exposed in the Mattermost server
+// configuration captures the plugin's external configuration as exposed in the Xenia server
 // configuration, as well as values computed from the configuration. Any public fields will be
-// deserialized from the Mattermost server configuration in OnConfigurationChange.
+// deserialized from the Xenia server configuration in OnConfigurationChange.
 //
 // As plugins are inherently concurrent (hooks being called asynchronously), and the plugin
 // configuration can change at any time, access to the configuration must be synchronized. The
@@ -176,7 +176,7 @@ func (p *Plugin) OnConfigurationChange() error {
 	var configuration = new(configuration)
 	var err error
 
-	// Load the public configuration fields from the Mattermost server configuration.
+	// Load the public configuration fields from the Xenia server configuration.
 	if loadConfigErr := p.API.LoadPluginConfiguration(configuration); loadConfigErr != nil {
 		return errors.Wrap(loadConfigErr, "failed to load plugin configuration")
 	}

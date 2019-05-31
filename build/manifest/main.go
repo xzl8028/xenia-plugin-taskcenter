@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/mattermost/mattermost-server/model"
+	"github.com/xzl8028/xenia-server/model"
 	"github.com/pkg/errors"
 )
 
