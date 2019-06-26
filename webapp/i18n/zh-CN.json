@@ -13,11 +13,10 @@
   "useractions.demo": "任务中心: ",
   "panel.id" : "任务编码",
   "panel.time" : "时间",
-  "panel.dept" : "执行部门",
+  "panel.send_dept" : "发单部门",
+  "panel.reveive_dept" : "收单部门",
   "panel.room" : "客房号码",
-  "panel.task" : "任务内容",
+  "panel.task" : "任务类别",
   "panel.note" : "备注",
   "panel.status" : "状态"
-
-
 }
