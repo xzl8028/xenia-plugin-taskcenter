@@ -70,9 +70,16 @@ function Task(props) {
         <tr>
             <td>{props.item.task_id}</td>
             <td>
-                {createAt.toLocaleDateString() +
+                {createAt.toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric"
+                }) +
                     " " +
-                    createAt.toLocaleTimeString()}
+                    createAt.toLocaleTimeString("en-US", {
+                        hour12: false,
+                        hour: "numeric",
+                        minute: "numeric"
+                    })}
             </td>
             <td>{props.item.send_dept}</td>
             <td>{props.item.receive_dept}</td>
@@ -756,7 +763,8 @@ class TaskPanel extends Component {
                                                     minDate: "today",
                                                     maxDate: new Date().fp_incr(
                                                         7
-                                                    )
+                                                    ),
+                                                    time_24hr: true
                                                 }}
                                                 onChange={date =>
                                                     this.setState({
@@ -811,7 +819,8 @@ class TaskPanel extends Component {
                                             value={date}
                                             options={{
                                                 minDate: "today",
-                                                maxDate: new Date().fp_incr(7)
+                                                maxDate: new Date().fp_incr(7),
+                                                time_24hr: true
                                             }}
                                             onChange={date =>
                                                 this.handleTimeChange(date)
