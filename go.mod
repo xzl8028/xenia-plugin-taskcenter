@@ -1,4 +1,4 @@
-module github.com/xzl8028/xenia-plugin-demo
+module github.com/xzl8028/xenia-plugin-taskcenter
 
 go 1.12
 

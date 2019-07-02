@@ -1,16 +1,10 @@
-var path = require('path');
+var path = require("path");
 
 module.exports = {
-    entry: [
-        './src/index.js',
-    ],
+    entry: ["./src/index.js"],
     resolve: {
-        modules: [
-            'src',
-            'node_modules',
-            path.resolve(__dirname),
-        ],
-        extensions: ['*', '.js', '.jsx'],
+        modules: ["src", "node_modules", path.resolve(__dirname)],
+        extensions: ["*", ".js", ".jsx"]
     },
     module: {
         rules: [
@@ -18,26 +12,30 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader',
+                    loader: "babel-loader",
                     options: {
-                        presets: ['env', 'react'],
+                        presets: ["env", "react"],
                         plugins: [
-                            'transform-class-properties',
-                            'transform-object-rest-spread',
-                        ],
-                    },
-                },
+                            "transform-class-properties",
+                            "transform-object-rest-spread"
+                        ]
+                    }
+                }
             },
-        ],
+            {
+                test: /\.css$/,
+                loaders: ["style-loader", "css-loader"]
+            }
+        ]
     },
     externals: {
-        react: 'React',
-        redux: 'Redux',
-        'react-redux': 'ReactRedux',
+        react: "React",
+        redux: "Redux",
+        "react-redux": "ReactRedux"
     },
     output: {
-        path: path.join(__dirname, '/dist'),
-        publicPath: '/',
-        filename: 'main.js',
-    },
+        path: path.join(__dirname, "/dist"),
+        publicPath: "/",
+        filename: "main.js"
+    }
 };

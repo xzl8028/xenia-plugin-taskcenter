@@ -27,9 +27,6 @@ apply:
 check-style: webapp/.npminstall gofmt govet
 	@echo Checking for style guide compliance
 
-ifneq ($(HAS_WEBAPP),)
-	cd webapp && npm run lint
-endif
 
 ## Runs gofmt against all packages.
 .PHONY: gofmt
@@ -140,9 +137,9 @@ test: webapp/.npminstall
 ifneq ($(HAS_SERVER),)
 	$(GO) test -race -v ./server/...
 endif
-ifneq ($(HAS_WEBAPP),)
-	cd webapp && $(NPM) run fix;
-endif
+# ifneq ($(HAS_WEBAPP),)
+# 	cd webapp && $(NPM) run fix;
+# endif
 
 ## Creates a coverage report for the server code.
 .PHONY: coverage
@@ -157,7 +154,7 @@ endif
 i18n-extract: 
 ifneq ($(HAS_WEBAPP),)
 	@[[ -d $(MM_UTILITIES_DIR) ]] || echo "You must clone github.com/xzl8028/mattermost-utilities repo in .. to use this command"
-	@[[ -d $(MM_UTILITIES_DIR) ]] && cd $(MM_UTILITIES_DIR) && npm install && npm run babel && node mmjstool/build/index.js i18n extract-webapp --webapp-dir ../xenia-plugin-demo/webapp
+	@[[ -d $(MM_UTILITIES_DIR) ]] && cd $(MM_UTILITIES_DIR) && npm install && npm run babel && node mmjstool/build/index.js i18n extract-webapp --webapp-dir ../xenia-plugin-taskcenter/webapp
 endif
 
 ## Clean removes all build artifacts.

@@ -1,4 +1,4 @@
-# Demo Plugin ![CircleCI branch](https://img.shields.io/circleci/project/github/mattermost/xenia-plugin-demo/master.svg)
+# Demo Plugin ![CircleCI branch](https://img.shields.io/circleci/project/github/mattermost/xenia-plugin-taskcenter/master.svg)
 
 This plugin demonstrates the capabilities of a Xenia plugin. It includes the same build scripts as [xenia-plugin-sample](https://github.com/xzl8028/xenia-plugin-sample), but implements all supported server-side hooks and registers a component for each supported client-side integration point. See [server/README.md](server/README.md) and [webapp/README.md](webapp/README.md) for more details. The plugin also doubles as a testbed for verifying plugin functionality during release testing.
 
