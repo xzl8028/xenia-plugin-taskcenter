@@ -444,14 +444,18 @@ class TaskPanel extends Component {
 
         if (IsSecondTimeInput) {
             form_secondContent = new Date(form_secondContent);
-            form_secondContent =
-                form_secondContent.toLocaleDateString() +
-                " " +
-                form_secondContent.toLocaleTimeString();
+            form_secondContent = form_secondContent.toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric"
+            }) + " " + form_secondContent.toLocaleTimeString("en-US", {
+                hour12: false,
+                hour: "numeric",
+                minute: "numeric"
+            });
         }
 
 
-        const due_at = date;
+        const due_at = new Date(date).getTime();
         const send_dept = currentDept;
         const receive_dept = form_receiveDept;
         const room_id = form_roomId;
@@ -460,7 +464,7 @@ class TaskPanel extends Component {
 
         //发送给后端，现在先模拟一个本地添加
         this.instance
-            .post(`/api/v4/tasks/1/insert?due_at=${0}&send_dept=${send_dept}&receive_dept=${receive_dept}&room_id=${room_id}&task_type=${task_type}&note=${note} &status=${status}`,
+            .post(`/api/v4/tasks/1/insert?due_at=${due_at}&send_dept=${send_dept}&receive_dept=${receive_dept}&room_id=${room_id}&task_type=${task_type}&note=${note} &status=${status}`,
             )
             .then((res) => {
                 console.log("create success! ", res);
