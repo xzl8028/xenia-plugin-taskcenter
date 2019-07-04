@@ -12,11 +12,12 @@ import { FormattedMessage } from "react-intl";
 
 import Joi from "joi-browser";
 import Flatpickr from "react-flatpickr";
-
+import axios from "axios";
 import Select from "./components/select";
 
 function Task(props) {
     const createAt = new Date(props.item.create_at);
+    const dueAt = new Date(props.item.due_at);
     let status, notion, showButton;
 
     // if (props.sortNotion === "只看发单信息") {
@@ -81,6 +82,18 @@ function Task(props) {
                         minute: "numeric"
                     })}
             </td>
+            <td>
+                {dueAt.toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric"
+                }) +
+                    " " +
+                    dueAt.toLocaleTimeString("en-US", {
+                        hour12: false,
+                        hour: "numeric",
+                        minute: "numeric"
+                    })}
+            </td>
             <td>{props.item.send_dept}</td>
             <td>{props.item.receive_dept}</td>
             <td>{props.item.room_id}</td>
@@ -107,7 +120,7 @@ class TaskPanel extends Component {
   It is used to switch between task console view and form view
   */
     state = {
-        taskList: "",
+        taskList: [],
         currentDept: "",
         deptOptions: "",
         sortNotion: "",
@@ -126,51 +139,21 @@ class TaskPanel extends Component {
         note: ""
     };
 
+    instance = ""
+
     constructor(props) {
         super(props);
 
-        const tmp = [
-            {
-                task_id: 1,
-                create_at: "2019-06-26T10:17:13Z",
-                send_dept: "前厅部",
-                receive_dept: "客房部",
-                room_id: 503,
-                task_type: "运送矿泉水",
-                note: "evan",
-                status: 1
-            },
-            {
-                task_id: 2,
-                create_at: "2019-06-26T10:17:13Z",
-                send_dept: "前厅部",
-                receive_dept: "工程部",
-                room_id: 101,
-                task_type: "维修空调",
-                note: "gree",
-                status: 2
-            },
-            {
-                task_id: 4,
-                create_at: "2019-06-26T10:17:13Z",
-                send_dept: "客房部",
-                receive_dept: "前厅部",
-                room_id: 503,
-                task_type: "运送矿泉水",
-                note: "evan",
-                status: 1
-            },
-            {
-                task_id: 5,
-                create_at: "2019-06-26T10:17:13Z",
-                send_dept: "工程部",
-                receive_dept: "前厅部",
-                room_id: 101,
-                task_type: "维修空调",
-                note: "gree",
-                status: 2
+
+        console.log("@@@@@@@", document.cookie)
+        this.instance = axios.create({
+            baseURL: 'http://47.111.8.31:8065',
+            timeout: 1000,
+            headers: {
+                "X-CSRF-Token": document.cookie.slice(-26).toString()
             }
-        ];
+        });
+
 
         /* 真实场景中应该是取用户的数据决定 */
         const currentDept = "前厅部";
@@ -214,7 +197,7 @@ class TaskPanel extends Component {
         };
 
         this.state = {
-            taskList: tmp,
+            taskList: [],
             currentDept,
             deptOptions,
             sortNotion,
@@ -234,51 +217,45 @@ class TaskPanel extends Component {
             readySubmit: false
         };
 
-        this.fetchTasks = this.fetchTasks.bind(this);
-
-        // !!!部署去阿里云的时候把下一行解除comment
-        // this.fetchTasks();
+        this.fetchTasks();
     }
 
-    fetchTasks() {
-        fetch("http://47.111.8.31:8065/api/v4/tasks")
-            .then(res => {
-                return res.json();
-            })
-            .then(data => {
-                /* 未来合起来的时候需要做这个 */
+    //每5s轮询一遍，更新task
+    componentDidMount = () => {
+        console.log("!!!!!", sessionStorage);
+        this.fetchTasks();
+        setInterval(() => {
+            this.fetchTasks();
+        }, 5000);
+    }
 
+    fetchTasks = () => {
+        this.instance
+            .get("/api/v4/tasks")
+            .then((res) => {
+
+                console.log(res);
                 this.setState({
-                    taskList: data
+                    taskList: res.data
                 });
+
             })
             .catch(err => console.log(err));
-    }
+    };
 
     /* ************************* */
     getSchema = () => {
         return {
             form_receiveDept: Joi.string()
-                // .valid(
-                //   this.state.deptOptions.filter(
-                //     option => option != this.state.currentDept
-                //   )
-                // )
                 .required()
                 .label("Receive Department"),
             form_orderContent: Joi.string()
-                // .valid(
-                //   this.state.orderContentOptions[this.state.form_receiveDept] || [""]
-                // )
                 .required()
                 .label("Order Content"),
             form_secondContent_Time: Joi.date()
                 .greater("now")
                 .required()
                 .label("Time info")
-
-            // form_secondContent_selector: ,
-            // form_comments: Joi.string().label("")
         };
     };
 
@@ -455,7 +432,6 @@ class TaskPanel extends Component {
     handleSubmit = e => {
         e.preventDefault();
         const {
-            taskList,
             date,
             currentDept,
             form_receiveDept,
@@ -474,25 +450,24 @@ class TaskPanel extends Component {
                 form_secondContent.toLocaleTimeString();
         }
 
-        const new_order = {};
 
-        //task id 该怎么搞？
-        new_order.task_id = taskList[taskList.length - 1].task_id++;
-        new_order.create_at = date;
-        new_order.send_dept = currentDept;
-        new_order.receive_dept = form_receiveDept;
-        new_order.room_id = form_roomId;
-        new_order.task_type = `${form_orderContent}：${form_secondContent}`;
-        new_order.note = note;
-        new_order.status = 0;
+        const due_at = date;
+        const send_dept = currentDept;
+        const receive_dept = form_receiveDept;
+        const room_id = form_roomId;
+        const task_type = `${form_orderContent}：${form_secondContent}`;
+        const status = 0;
 
         //发送给后端，现在先模拟一个本地添加
-        const new_taskList = [...this.state.taskList, new_order];
+        this.instance
+            .post(`/api/v4/tasks/1/insert?due_at=${0}&send_dept=${send_dept}&receive_dept=${receive_dept}&room_id=${room_id}&task_type=${task_type}&note=${note} &status=${status}`,
+            )
+            .then((res) => {
+                console.log("create success! ", res);
+            })
+            .catch(err => console.log(err));
 
-        this.setState({
-            condition1: true,
-            taskList: new_taskList
-        });
+        this.setState({ condition1: true });
     };
 
     handleBack = e => {
@@ -509,23 +484,47 @@ class TaskPanel extends Component {
                 switch (item.status) {
                     case 0:
                         if (sortNotion === "只看发单信息") {
-                            item.status = 1;
+                            this.instance
+                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=1`)
+                                .then((res) => {
+                                    console.log("change status success! ", res);
+                                })
                         } else {
-                            item.status = 3;
+                            this.instance
+                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=3`)
+                                .then((res) => {
+                                    console.log("change status success! ", res);
+                                })
                         }
                         break;
                     case 1:
                         if (sortNotion === "只看发单信息") {
-                            item.status = 2;
+                            this.instance
+                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=2`)
+                                .then((res) => {
+                                    console.log("change status success! ", res);
+                                })
                         } else {
-                            item.status = 3;
+                            this.instance
+                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=3`)
+                                .then((res) => {
+                                    console.log("change status success! ", res);
+                                })
                         }
                         break;
                     case 4:
                         if (sortNotion === "只看发单信息") {
-                            item.status = 2;
+                            this.instance
+                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=2`)
+                                .then((res) => {
+                                    console.log("change status success! ", res);
+                                })
                         } else {
-                            item.status = 3;
+                            this.instance
+                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=3`)
+                                .then((res) => {
+                                    console.log("change status success! ", res);
+                                })
                         }
                         break;
                     default:
@@ -581,7 +580,6 @@ class TaskPanel extends Component {
                             <button
                                 type="button"
                                 className="btn btn-danger close-btn"
-                                // 部署时候应该改掉！！改成close
                                 onClick={this.props.onClose}
                             >
                                 X
@@ -602,7 +600,13 @@ class TaskPanel extends Component {
                                         </th>
                                         <th>
                                             <FormattedMessage
-                                                id="panel.time"
+                                                id="panel.createTime"
+                                                defaultMessage="任务创建时间"
+                                            />
+                                        </th>
+                                        <th>
+                                            <FormattedMessage
+                                                id="panel.dueTime"
                                                 defaultMessage="要求完成时间"
                                             />
                                         </th>
@@ -735,7 +739,7 @@ class TaskPanel extends Component {
                                                 value={form_secondContent}
                                                 options={
                                                     secondContentType[
-                                                        form_orderContent
+                                                    form_orderContent
                                                     ]
                                                 }
                                                 onChange={
@@ -853,6 +857,7 @@ const Root = ({ visible, close, theme }) => {
     if (!visible) {
         return null;
     }
+
 
     const style = getStyle(theme);
     return (
