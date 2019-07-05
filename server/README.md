@@ -125,7 +125,7 @@ This demo implementation logs a message to demo channel whenever a file is uploa
 
 ## Plugin Settings
 
-The following settings are available in the demo plugin system console page to demonstrate what is available via the [Xenia Plugin Settings Schema](https://developers.mattermost.com/extend/plugins/manifest-reference/#settings_schema).
+The following settings are available in the demo plugin system console page to demonstrate what is available via the [Xenia Plugin Settings Schema](https://developers.xenia.com/extend/plugins/manifest-reference/#settings_schema).
 
 ![system-console-demo-settings](docs/demo-settings.png)
 

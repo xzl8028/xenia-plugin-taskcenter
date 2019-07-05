@@ -20,7 +20,7 @@ export const channelHeaderButtonAction = openRootModal;
 export const fileUploadMethodAction = openRootModal;
 export const postDropdownMenuAction = openRootModal;
 
-// TODO: Move this into mattermost-redux or mattermost-webapp.
+// TODO: Move this into mattermost-redux or xenia-webapp.
 export const getPluginServerRoute = (state) => {
     const config = getConfig(state);
 

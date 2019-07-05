@@ -2,7 +2,7 @@ GO ?= $(shell command -v go 2> /dev/null)
 NPM ?= $(shell command -v npm 2> /dev/null)
 CURL ?= $(shell command -v curl 2> /dev/null)
 MANIFEST_FILE ?= plugin.json
-MM_UTILITIES_DIR ?= ../mattermost-utilities
+MM_UTILITIES_DIR ?= ../xenia-utilities
 
 export GO111MODULE=on
 
@@ -153,7 +153,7 @@ endif
 .PHONY: i18n-extract
 i18n-extract: 
 ifneq ($(HAS_WEBAPP),)
-	@[[ -d $(MM_UTILITIES_DIR) ]] || echo "You must clone github.com/xzl8028/mattermost-utilities repo in .. to use this command"
+	@[[ -d $(MM_UTILITIES_DIR) ]] || echo "You must clone github.com/xzl8028/xenia-utilities repo in .. to use this command"
 	@[[ -d $(MM_UTILITIES_DIR) ]] && cd $(MM_UTILITIES_DIR) && npm install && npm run babel && node mmjstool/build/index.js i18n extract-webapp --webapp-dir ../xenia-plugin-taskcenter/webapp
 endif
 

@@ -13,14 +13,11 @@ require (
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.3.0
 	github.com/xzl8028/go-i18n v1.10.0 // indirect
-	github.com/xzl8028/xenia-server v0.0.0
-	go.uber.org/atomic v1.4.0 // indirect
-	go.uber.org/zap v1.10.0 // indirect
+	github.com/xzl8028/xenia-server v0.0.0-20190704033831-6c6fc3746827
 	golang.org/x/crypto v0.0.0-20190506204251-e1dfcc566284 // indirect
-	golang.org/x/net v0.0.0-20190503192946-f4e77d36d62c // indirect
 	golang.org/x/sys v0.0.0-20190508100423-12bbe5a7a520 // indirect
+	golang.org/x/tools v0.0.0-20190703212419-2214986f1668 // indirect
 	google.golang.org/genproto v0.0.0-20190508193815-b515fa19cec8 // indirect
-	google.golang.org/grpc v1.20.1 // indirect
 )
 
 // Workaround for https://github.com/golang/go/issues/30831 and fallout.
