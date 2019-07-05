@@ -140,6 +140,7 @@ class TaskPanel extends Component {
     };
 
     instance = ""
+    channelIdList = []
 
     constructor(props) {
         super(props);
@@ -153,6 +154,12 @@ class TaskPanel extends Component {
                 "X-CSRF-Token": document.cookie.slice(-26).toString()
             }
         });
+
+        this.channelIdList = {
+            前厅部: "h736tfuhtffrxqkou5hkq5s4co",
+            客房部: "gdta3yubw7y7bpddchui3bb9qy",
+            工程部: "r9htqx3nxib55c9zqu4iehbdgy",
+        }
 
 
         /* 真实场景中应该是取用户的数据决定 */
@@ -459,15 +466,32 @@ class TaskPanel extends Component {
         const send_dept = currentDept;
         const receive_dept = form_receiveDept;
         const room_id = form_roomId;
-        const task_type = `${form_orderContent}：${form_secondContent}`;
+        const task_type = `${form_orderContent}${form_secondContent === "" ? "" : (": " + form_secondContent)}`;
         const status = 0;
 
-        //发送给后端，现在先模拟一个本地添加
+        //发送给后端
         this.instance
             .post(`/api/v4/tasks/1/insert?due_at=${due_at}&send_dept=${send_dept}&receive_dept=${receive_dept}&room_id=${room_id}&task_type=${task_type}&note=${note} &status=${status}`,
             )
             .then((res) => {
                 console.log("create success! ", res);
+            })
+            .catch(err => console.log(err));
+
+        //发送post到响应部门channel
+        //task_center plugin的user_id是：4dpckpnyqff9dqjwiymtpwugzc
+        this.instance
+            .post(`/api/v4/posts`, {
+                "channel_id": this.channelIdList[receive_dept],
+                "create_at": 0,
+                "file_ids": [],
+                "message": "maxye",
+                "metadata": {},
+                "pending_post_id": "4dpckpnyqff9dqjwiymtpwugzc",
+                "user_id": "4dpckpnyqff9dqjwiymtpwugzc"
+            })
+            .then((res) => {
+                console.log("send to dept channel success! ", res);
             })
             .catch(err => console.log(err));
 
@@ -893,7 +917,7 @@ const getStyle = theme => ({
         justifyContent: "center"
     },
     modal: {
-        "max-height": "50%",
+        "max-height": "60%",
         width: "50%",
         padding: "0.4rem",
         border: "1px solid #000",

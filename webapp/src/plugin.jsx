@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import en from 'i18n/en.json';
 
@@ -8,7 +8,7 @@ import es from 'i18n/es.json';
 
 import zhCN from 'i18n/zh-CN.json';
 
-import {id as pluginId} from './manifest';
+import { id as pluginId } from './manifest';
 
 import Root from './components/root';
 import BottomTeamSidebar from './components/bottom_team_sidebar';
@@ -34,12 +34,12 @@ import reducer from './reducer';
 
 function getTranslations(locale) {
     switch (locale) {
-    case 'en':
-        return en;
-    case 'es':
-        return es;
-    default:
-        return zhCN;
+        case 'en':
+            return en;
+        case 'es':
+            return es;
+        default:
+            return zhCN;
     }
 }
 
@@ -55,7 +55,7 @@ export default class DemoPlugin {
         );
 
         registry.registerChannelHeaderButtonAction(
-            <ChannelHeaderButtonIcon/>,
+            <ChannelHeaderButtonIcon />,
             () => store.dispatch(channelHeaderButtonAction()),
             <FormattedMessage
                 id='plugin.name'
@@ -71,7 +71,7 @@ export default class DemoPlugin {
                 defaultMessage='任务中心'
             />,
             () => store.dispatch(mainMenuAction()),
-            <MainMenuMobileIcon/>,
+            <MainMenuMobileIcon />,
         );
 
         registry.registerPostDropdownMenuAction(
@@ -83,7 +83,7 @@ export default class DemoPlugin {
         );
 
         registry.registerFileUploadMethod(
-            <FileUploadMethodIcon/>,
+            <FileUploadMethodIcon />,
             () => store.dispatch(fileUploadMethodAction()),
             <FormattedMessage
                 id='plugin.upload'
