@@ -19,6 +19,7 @@ function Task(props) {
     const createAt = new Date(props.item.create_at);
     const dueAt = new Date(props.item.due_at);
     let status, notion, showButton;
+    const style = getPad();
 
     // if (props.sortNotion === "只看发单信息") {
     //   showButton = true;
@@ -71,24 +72,24 @@ function Task(props) {
         <tr>
             <td>{props.item.task_id}</td>
             <td>
-                {createAt.toLocaleDateString("en-US", {
+                {createAt.toLocaleDateString('zh', {
                     month: "long",
                     day: "numeric"
                 }) +
                     " " +
-                    createAt.toLocaleTimeString("en-US", {
+                    createAt.toLocaleTimeString('zh', {
                         hour12: false,
                         hour: "numeric",
                         minute: "numeric"
                     })}
             </td>
             <td>
-                {dueAt.toLocaleDateString("en-US", {
+                {dueAt.toLocaleDateString('zh', {
                     month: "long",
                     day: "numeric"
                 }) +
                     " " +
-                    dueAt.toLocaleTimeString("en-US", {
+                    dueAt.toLocaleTimeString('zh', {
                         hour12: false,
                         hour: "numeric",
                         minute: "numeric"
@@ -97,9 +98,9 @@ function Task(props) {
             <td>{props.item.send_dept}</td>
             <td>{props.item.receive_dept}</td>
             <td>{props.item.room_id}</td>
-            <td>{props.item.task_type}</td>
-            <td>{props.item.note}</td>
-            <td>{status}</td>
+            <td style={style.pl2}>{props.item.task_type}</td>
+            <td style={style.pl2}>{props.item.note}</td>
+            <td style={style.pl2}>{status}</td>
 
             <td>
                 {showButton && (
@@ -146,19 +147,26 @@ class TaskPanel extends Component {
         super(props);
 
 
-        console.log("@@@@@@@", document.cookie)
+        let cookie = document.cookie
+        console.log("@@@@@@@", cookie)
+        let startIndex = cookie.indexOf("MMCSRF=") + 7
+        let endIndex = cookie.indexOf(";", startIndex);
+        let CSRF_Token = endIndex === -1 ? cookie.slice(startIndex) : cookie.slice(startIndex, endIndex)
+
+
         this.instance = axios.create({
             baseURL: 'http://47.111.8.31:8065',
             timeout: 1000,
             headers: {
-                "X-CSRF-Token": document.cookie.slice(-26).toString()
+                "X-CSRF-Token": CSRF_Token,
+                "Content-Type": "application/json"
             }
         });
 
         this.channelIdList = {
-            前厅部: "h736tfuhtffrxqkou5hkq5s4co",
-            客房部: "gdta3yubw7y7bpddchui3bb9qy",
-            工程部: "r9htqx3nxib55c9zqu4iehbdgy",
+            前厅部: "reception",
+            客房部: "housekeeping",
+            工程部: "engineering",
         }
 
 
@@ -170,16 +178,21 @@ class TaskPanel extends Component {
         const sortNotion = "只看发单信息";
 
         const orderContentOptions = {
-            前厅部: ["预定车辆", "叫醒服务", "搬运行李"],
-            客房部: ["配送客房用品", "客房清洁"],
-            工程部: ["维修设备"],
+            前厅部: ["预定车辆", "叫醒服务", "搬运行李", "寄快递", "搬运酒水", "借雨伞", "寄存行李", "其他"],
+            客房部: ["配送客房用品", "叫醒服务", "客房清洁", "其他"],
+            工程部: ["维修设备", "其他"],
             "": ["", "fake2"]
         };
 
         const secondContentType = {
             预定车辆: "form_secondContent_Time",
             叫醒服务: "form_secondContent_Time",
+            其他: "",
             搬运行李: "",
+            寄快递: "",
+            搬运酒水: "",
+            借雨伞: "",
+            寄存行李: "",
             客房清洁: "",
             配送客房用品: [
                 "毛巾",
@@ -189,7 +202,8 @@ class TaskPanel extends Component {
                 "被子",
                 "衣架",
                 "饮用水",
-                "沐浴用品套装"
+                "沐浴用品套装",
+                "其他"
             ],
             维修设备: [
                 "门锁",
@@ -199,7 +213,8 @@ class TaskPanel extends Component {
                 "空调",
                 "床",
                 "桌子",
-                "椅子"
+                "椅子",
+                "其他"
             ]
         };
 
@@ -208,21 +223,11 @@ class TaskPanel extends Component {
             currentDept,
             deptOptions,
             sortNotion,
-            condition1: true,
             orderContentOptions,
             secondContentType,
-            form_receiveDept: "",
-            orderContentNotReady: true,
-            form_orderContent: "",
-            secondContentNotReady: true,
-            form_secondContent: "",
-            form_roomId: "",
-            note: "",
-            date: new Date(),
-            IsSecondSelectorInput: false,
-            IsSecondTimeInput: false,
-            readySubmit: false
+            condition1: true,
         };
+        this.resetFormVariables();
 
         this.fetchTasks();
     }
@@ -233,19 +238,17 @@ class TaskPanel extends Component {
         this.fetchTasks();
         setInterval(() => {
             this.fetchTasks();
-        }, 5000);
+        }, 1000);
     }
 
     fetchTasks = () => {
         this.instance
             .get("/api/v4/tasks")
             .then((res) => {
-
                 console.log(res);
                 this.setState({
                     taskList: res.data
                 });
-
             })
             .catch(err => console.log(err));
     };
@@ -282,13 +285,14 @@ class TaskPanel extends Component {
             return tmp.filter(option => option.receive_dept === currentDept);
         }
         if (sortNotion === "只看收单信息") {
-            return tmp.filter(option => option.send_dept === currentDept);
+            //调整到时间近的展示在上面，加个reverse
+            let list = tmp.filter(option => option.send_dept === currentDept);
+            return list.reverse()
         }
     };
 
-    handleCreateTask = () => {
+    resetFormVariables = () => {
         this.setState({
-            condition1: false,
             form_receiveDept: "",
             orderContentNotReady: true,
             form_orderContent: "",
@@ -300,6 +304,13 @@ class TaskPanel extends Component {
             IsSecondTimeInput: false,
             IsSecondSelectorInput: false,
             readySubmit: false
+        });
+    }
+
+    handleCreateTask = () => {
+        this.resetFormVariables();
+        this.setState({
+            condition1: false,
         });
     };
 
@@ -451,10 +462,10 @@ class TaskPanel extends Component {
 
         if (IsSecondTimeInput) {
             form_secondContent = new Date(form_secondContent);
-            form_secondContent = form_secondContent.toLocaleDateString("en-US", {
+            form_secondContent = form_secondContent.toLocaleDateString('zh', {
                 month: "long",
                 day: "numeric"
-            }) + " " + form_secondContent.toLocaleTimeString("en-US", {
+            }) + " " + form_secondContent.toLocaleTimeString('zh', {
                 hour12: false,
                 hour: "numeric",
                 minute: "numeric"
@@ -469,33 +480,20 @@ class TaskPanel extends Component {
         const task_type = `${form_orderContent}${form_secondContent === "" ? "" : (": " + form_secondContent)}`;
         const status = 0;
 
+        let task_id;
+
         //发送给后端
         this.instance
             .post(`/api/v4/tasks/1/insert?due_at=${due_at}&send_dept=${send_dept}&receive_dept=${receive_dept}&room_id=${room_id}&task_type=${task_type}&note=${note} &status=${status}`,
             )
             .then((res) => {
+                task_id = res.data.task_id;
                 console.log("create success! ", res);
+                console.log("the task id is: ", task_id)
             })
             .catch(err => console.log(err));
 
-        //发送post到响应部门channel
-        //task_center plugin的user_id是：4dpckpnyqff9dqjwiymtpwugzc
-        this.instance
-            .post(`/api/v4/posts`, {
-                "channel_id": this.channelIdList[receive_dept],
-                "create_at": 0,
-                "file_ids": [],
-                "message": "maxye",
-                "metadata": {},
-                "pending_post_id": "4dpckpnyqff9dqjwiymtpwugzc",
-                "user_id": "4dpckpnyqff9dqjwiymtpwugzc"
-            })
-            .then((res) => {
-                console.log("send to dept channel success! ", res);
-            })
-            .catch(err => console.log(err));
-
-        this.setState({ condition1: true });
+        this.setState({ condition1: true, sortNotion: "只看收单信息" });
     };
 
     handleBack = e => {
@@ -564,6 +562,25 @@ class TaskPanel extends Component {
         this.setState({ taskList });
     };
 
+    handleNotePH = () => {
+        const TaskTypeMap = {
+            预定车辆: "房客的姓名、手机号码、车型: 商务车或出租车",
+            其他: "输入具体任务内容"
+        }
+        let placeholder;
+        const { form_orderContent, form_secondContent } = this.state;
+        if (TaskTypeMap[form_orderContent] === undefined) {
+            placeholder = "输入备注信息"
+        } else {
+            placeholder = TaskTypeMap[form_orderContent]
+        }
+
+        if (form_secondContent === "其他") {
+            placeholder = "输入具体物品/设备"
+        }
+        return placeholder;
+    }
+
     render() {
         /* 解构赋值区域 */
         const {
@@ -616,7 +633,7 @@ class TaskPanel extends Component {
                         <div className="table-responsive">
                             <table
                                 id="taskListTable"
-                                className="table  table-striped"
+                                className="table table-striped fixed_header"
                             >
                                 <thead>
                                     <tr>
@@ -672,6 +689,10 @@ class TaskPanel extends Component {
                                             <FormattedMessage
                                                 id="panel.status"
                                                 defaultMessage="状态"
+                                            />
+                                        </th>
+                                        <th>
+                                            <span
                                             />
                                         </th>
                                     </tr>
@@ -838,13 +859,13 @@ class TaskPanel extends Component {
                                             <textarea
                                                 className="form-control"
                                                 aria-label="With textarea"
-                                                placeholder="输入备注信息..."
+                                                placeholder={this.handleNotePH()}
                                                 value={note}
                                                 onChange={this.handleNoteChange}
                                             />
                                         </div>
                                     </p>
-                                    <div className="w-100">要求完成时间</div>
+                                    <div className="w-100">要求任务完成时间</div>
                                     <p className="form-selector">
                                         <Flatpickr
                                             data-enable-time={true}
@@ -917,8 +938,8 @@ const getStyle = theme => ({
         justifyContent: "center"
     },
     modal: {
-        "max-height": "60%",
-        width: "50%",
+        "max-height": "60rem",
+        width: "105rem",
         padding: "0.4rem",
         border: "1px solid #000",
         "border-radius": "0.5rem",
@@ -926,5 +947,11 @@ const getStyle = theme => ({
         backgroundColor: theme.centerChannelBg
     }
 });
+
+const getPad = () => ({
+    pl2: {
+        "padding-left": "2rem"
+    }
+})
 
 export default Root;

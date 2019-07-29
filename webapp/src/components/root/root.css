@@ -89,3 +89,41 @@ textarea.room-content {
   padding-bottom: 1rem;
   padding-top: 1rem;
 }
+
+/* .table-body {
+  height: 40rem;
+  overflow: auto;
+}
+
+.fixed_header{
+  width: 400px;
+  table-layout: fixed;
+  border-collapse: collapse;
+} */
+
+.fixed_header tbody{
+display:block;
+width: 100%;
+overflow: auto;
+height: 40rem;
+}
+
+.fixed_header thead tr {
+ display: block;
+}
+
+.fixed_header thead {
+background: #b6b5b2;
+color:#fff;
+}
+
+.fixed_header th, .fixed_header td {
+padding-top: 1rem;
+padding-bottom: 1rem;
+text-align: center;
+width: 9%;
+}
+
+.pl-2 td {
+  padding-left: 2rem;
+} 
