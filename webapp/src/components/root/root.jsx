@@ -141,7 +141,7 @@ class TaskPanel extends Component {
     };
 
     instance = ""
-    channelIdList = []
+
 
     constructor(props) {
         super(props);
@@ -153,9 +153,11 @@ class TaskPanel extends Component {
         let endIndex = cookie.indexOf(";", startIndex);
         let CSRF_Token = endIndex === -1 ? cookie.slice(startIndex) : cookie.slice(startIndex, endIndex)
 
+        // let baseURL = document.location.origin;
+        let baseURL = ""
 
         this.instance = axios.create({
-            baseURL: 'http://47.111.8.31:8065',
+            baseURL: baseURL,
             timeout: 1000,
             headers: {
                 "X-CSRF-Token": CSRF_Token,
@@ -163,11 +165,11 @@ class TaskPanel extends Component {
             }
         });
 
-        this.channelIdList = {
-            前厅部: "reception",
-            客房部: "housekeeping",
-            工程部: "engineering",
-        }
+        // this.channelIdList = {
+        //     前厅部: "reception",
+        //     客房部: "housekeeping",
+        //     工程部: "engineering",
+        // }
 
 
         /* 真实场景中应该是取用户的数据决定 */
@@ -243,7 +245,7 @@ class TaskPanel extends Component {
 
     fetchTasks = () => {
         this.instance
-            .get("/api/v4/tasks")
+            .get("/api/v4/tasks/withteam")
             .then((res) => {
                 console.log(res);
                 this.setState({
@@ -484,7 +486,7 @@ class TaskPanel extends Component {
 
         //发送给后端
         this.instance
-            .post(`/api/v4/tasks/1/insert?due_at=${due_at}&send_dept=${send_dept}&receive_dept=${receive_dept}&room_id=${room_id}&task_type=${task_type}&note=${note} &status=${status}`,
+            .post(`/api/v4/tasks/1/insertpost?due_at=${due_at}&send_dept=${send_dept}&receive_dept=${receive_dept}&room_id=${room_id}&task_type=${task_type}&note=${note} &status=${status}`,
             )
             .then((res) => {
                 task_id = res.data.task_id;
@@ -511,13 +513,13 @@ class TaskPanel extends Component {
                     case 0:
                         if (sortNotion === "只看发单信息") {
                             this.instance
-                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=1`)
+                                .post(`/api/v4/tasks/${task_id}/updatepost?status=1`)
                                 .then((res) => {
                                     console.log("change status success! ", res);
                                 })
                         } else {
                             this.instance
-                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=3`)
+                                .post(`/api/v4/tasks/${task_id}/updatepost?status=3`)
                                 .then((res) => {
                                     console.log("change status success! ", res);
                                 })
@@ -526,13 +528,13 @@ class TaskPanel extends Component {
                     case 1:
                         if (sortNotion === "只看发单信息") {
                             this.instance
-                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=2`)
+                                .post(`/api/v4/tasks/${task_id}/updatepost?status=2`)
                                 .then((res) => {
                                     console.log("change status success! ", res);
                                 })
                         } else {
                             this.instance
-                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=3`)
+                                .post(`/api/v4/tasks/${task_id}/updatepost?status=3`)
                                 .then((res) => {
                                     console.log("change status success! ", res);
                                 })
@@ -541,13 +543,13 @@ class TaskPanel extends Component {
                     case 4:
                         if (sortNotion === "只看发单信息") {
                             this.instance
-                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=2`)
+                                .post(`/api/v4/tasks/${task_id}/updatepost?status=2`)
                                 .then((res) => {
                                     console.log("change status success! ", res);
                                 })
                         } else {
                             this.instance
-                                .post(`/api/v4/tasks/${task_id}/update_status_quick?status=3`)
+                                .post(`/api/v4/tasks/${task_id}/updatepost?status=3`)
                                 .then((res) => {
                                     console.log("change status success! ", res);
                                 })
